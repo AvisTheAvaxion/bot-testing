@@ -111,9 +111,6 @@ def run():
                 await event.message.respond(print_array())
                 await event.message.respond("----------------------------")
 
-
-
-
     bot.run()
 
 
