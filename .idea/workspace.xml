@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="36edfa5c-0dea-4e5b-9467-d940d7866910" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/jsonStuff/read_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonStuff/read_json.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonStuff/test1.json" beforeDir="false" afterPath="$PROJECT_DIR$/jsonStuff/test1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="36edfa5c-0dea-4e5b-9467-d940d7866910" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
