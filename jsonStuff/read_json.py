@@ -1,4 +1,5 @@
 import json
+from jsonStuff import write_json
 
 
 def set2d_arr(data):
@@ -50,4 +51,6 @@ def run():
     print("\n\n\n")
     print(json_variables["value4"])
     print(json_variables["value4"][2][2])
+
+    write_json.write_to_json_file("jsonStuff/", "test1", json_variables)
 
