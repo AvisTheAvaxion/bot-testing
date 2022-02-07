@@ -1,62 +1,70 @@
 import hikari
-import random
 import hidden
-
-player_x_pos = 0
-player_y_pos = 0
-
-chunk_x_pos = 0
-chunk_y_pos = 0
-
-w, h = 3, 3
-chunk_cont = [[0 for x in range(w)] for y in range(h)]
-
 w, h = 12, 12
+
+player_x_pos = 6
+player_y_pos = 6
+
+ccw, cch = 3, 3
+
+chunk_x_pos = 1
+chunk_y_pos = 1
+
+chunk_seed = [[0 for x in range(ccw)] for y in range(cch)]
+
+
+def gen_seeds():
+    a = 0
+    for i in range(cch):
+        for i1 in range(ccw):
+            chunk_seed[i][i1] = a
+            a = a + 1
+
+
+gen_seeds()
+
+
 current_chunk = [[0 for x in range(w)] for y in range(h)]
 
-chunk_border = "----------------------------"
+
+def gen_chunk(height, width, value):
+    for i in range(height):
+        for i1 in range(width):
+            current_chunk[i][i1] = value
 
 
-# seed generation
-def make_arr(h1, w1, arr, rand, v):
-    f = 1
-    for i in range(h1):
-        for i1 in range(w1):
-            if rand:
-                arr[i][i1] = f
-                f = f + 1
+gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
 
-            else:
-                arr[i][i1] = v
+current_chunk[player_y_pos][player_x_pos] = 2
 
 
-make_arr(3, 3, chunk_cont, True, None)
-
-
-# Rendering engine
-def print_array(h1, w1, matrix):
+def print_array(height, width, arr):
     s = ""
-    for i in range(h1):
-        for i1 in range(w1):
-            s = s + str(matrix[i][i1])
+    for i in range(height):
+        for i1 in range(width):
+            s = s + str(arr[i][i1])
 
         s = s + "\n"
 
     return s
 
 
-# chunk generation from seed
-def chunk_gen(h1, w1, v):
-    for i in range(h1):
-        for i1 in range(w1):
-            current_chunk[i][i1] = v
+def invalid_tile_check(x, y):
+    a = current_chunk[y][x]
+    invalid_tiles = [1, 2, 7]
+    check = False
+    for i in invalid_tiles:
+        if i == a:
+            check = True
+
+    return check
 
 
-chunk_gen(12, 12, 0)
-current_chunk[0][0] = "p"
+current_chunk[4][6] = 1
 
 
 def run():
+
     bot = hikari.GatewayBot(token=hidden.token)
 
     @bot.listen()
@@ -67,8 +75,12 @@ def run():
 
         if event.message.content == "!show":
             await event.message.respond(print_array(12, 12, current_chunk))
-            await event.message.respond(chunk_border)\
+            await event.message.respond("----------------------------")
 
+            await event.message.respond(f"py: {player_y_pos}")
+            await event.message.respond(f"px: {player_x_pos}")
+            await event.message.respond(f"chunk y: {chunk_y_pos}")
+            await event.message.respond(f"chunk x: {chunk_x_pos}")
 
     @bot.listen()
     async def up(event: hikari.GuildMessageCreateEvent) -> None:
@@ -76,19 +88,42 @@ def run():
             return
 
         if event.message.content == "!up":
-            global current_chunk
-            global chunk_y_pos
             global player_y_pos
+            global chunk_y_pos
+
             if player_y_pos > 0:
-                current_chunk[player_y_pos][player_x_pos] = 0
+                current_chunk[player_y_pos][player_x_pos] = chunk_seed[chunk_y_pos][chunk_x_pos]
                 player_y_pos = player_y_pos - 1
-                current_chunk[player_y_pos][player_x_pos] = "p"
-                await event.message.respond(print_array(12, 12, current_chunk))
+                if not invalid_tile_check(player_x_pos, player_y_pos):
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("----------------------------")
+
+                else:
+                    player_y_pos = player_y_pos + 1
+                    await event.message.respond("Invalid Move! (Invalid Tile)")
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("----------------------------")
 
             else:
                 if chunk_y_pos > 0:
                     chunk_y_pos = chunk_y_pos - 1
-                    chunk_gen(12, 12, chunk_cont[chunk_y_pos, chunk_x_pos])
+                    gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                    if not invalid_tile_check(player_x_pos, player_y_pos):
+                        player_y_pos = 11
+
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("----------------------------")
+
+                    else:
+                        chunk_y_pos = chunk_y_pos + 1
+                        gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                        await event.message.respond("Invalid move! (Invalid tile in other chunk)")
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("----------------------------")
 
                 else:
                     await event.message.respond("Invalid move")
@@ -99,24 +134,103 @@ def run():
             return
 
         if event.message.content == "!down":
-            global chunk_y_pos
             global player_y_pos
-            if player_y_pos == 11:
+            global chunk_y_pos
+            if player_y_pos == h - 1:
                 if chunk_y_pos < 2:
                     chunk_y_pos = chunk_y_pos + 1
-                    chunk_gen(12, 12, chunk_cont[chunk_y_pos, chunk_x_pos])
+
+                    gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                    if not invalid_tile_check(player_x_pos, 0):
+                        player_y_pos = 0
+
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("----------------------------")
+
+                    else:
+                        chunk_y_pos = chunk_y_pos - 1
+                        gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("Invalid move! (invalid tile in another chunk")
 
                 else:
-                    await event.message.respond("Invalid move")
-
+                    await event.message.respond("Invalid move!")
 
             else:
-                current_chunk[player_y_pos][player_x_pos] = 0
+                current_chunk[player_y_pos][player_x_pos] = chunk_seed[chunk_y_pos][chunk_x_pos]
                 player_y_pos = player_y_pos + 1
-                current_chunk[player_y_pos][player_x_pos] = "p"
-                await event.message.respond(print_array(12, 12, current_chunk))
+                if not invalid_tile_check(player_x_pos, player_y_pos):
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("----------------------------")
 
+                else:
+                    player_y_pos = player_y_pos - 1
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("Invalid move! (invalid tile)")
+
+    @bot.listen()
+    async def left(event: hikari.GuildMessageCreateEvent) -> None:
+        if event.is_bot or not event.content:
+            return
+
+        if event.message.content == "!left":
+            global player_x_pos
+            global chunk_x_pos
+            if player_x_pos > 0:
+                current_chunk[player_y_pos][player_x_pos] = chunk_seed[chunk_y_pos][chunk_x_pos]
+                player_x_pos = player_x_pos - 1
+                current_chunk[player_y_pos][player_x_pos] = 2
+                await event.message.respond(print_array(12, 12, current_chunk))
+                await event.message.respond("----------------------------")
+
+            else:
+                if chunk_x_pos > 0:
+                    chunk_x_pos = chunk_x_pos - 1
+
+                    gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                    player_x_pos = 11
+
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("----------------------------")
+
+                else:
+                    await event.message.respond("Invalid move!")
+
+    @bot.listen()
+    async def right(event: hikari.GuildMessageCreateEvent) -> None:
+        if event.is_bot or not event.content:
+            return
+
+        if event.message.content == "!right":
+            global player_x_pos
+            global chunk_x_pos
+            if player_x_pos == w - 1:
+                if chunk_x_pos < 2:
+                    chunk_x_pos = chunk_x_pos + 1
+
+                    gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                    player_x_pos = 0
+
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("----------------------------")
+
+                else:
+                    await event.message.respond("Invalid move!")
+
+            else:
+                current_chunk[player_y_pos][player_x_pos] = chunk_seed[chunk_y_pos][chunk_x_pos]
+                player_x_pos = player_x_pos + 1
+                current_chunk[player_y_pos][player_x_pos] = 2
+                await event.message.respond(print_array(12, 12, current_chunk))
+                await event.message.respond("----------------------------")
 
     bot.run()
+
 
 run()
