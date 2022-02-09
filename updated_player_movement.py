@@ -83,6 +83,14 @@ def run():
             await event.message.respond(f"chunk x: {chunk_x_pos}")
 
     @bot.listen()
+    async def kill(event: hikari.GuildMessageCreateEvent) -> None:
+        if event.is_bot or not event.content:
+            return
+
+        if event.message.content == "!kill":
+            quit()
+
+    @bot.listen()
     async def up(event: hikari.GuildMessageCreateEvent) -> None:
         if event.is_bot or not event.content:
             return
