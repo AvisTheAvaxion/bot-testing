@@ -51,7 +51,7 @@ def print_array(height, width, arr):
 
 def invalid_tile_check(x, y):
     a = current_chunk[y][x]
-    invalid_tiles = [1, 2, 7]
+    invalid_tiles = [1, 2, 7, 3, 5]
     check = False
     for i in invalid_tiles:
         if i == a:
@@ -88,6 +88,7 @@ def run():
             return
 
         if event.message.content == "!kill":
+            print("bot killed")
             quit()
 
     @bot.listen()
@@ -188,26 +189,43 @@ def run():
         if event.message.content == "!left":
             global player_x_pos
             global chunk_x_pos
+
             if player_x_pos > 0:
                 current_chunk[player_y_pos][player_x_pos] = chunk_seed[chunk_y_pos][chunk_x_pos]
                 player_x_pos = player_x_pos - 1
-                current_chunk[player_y_pos][player_x_pos] = 2
-                await event.message.respond(print_array(12, 12, current_chunk))
-                await event.message.respond("----------------------------")
-
-            else:
-                if chunk_x_pos > 0:
-                    chunk_x_pos = chunk_x_pos - 1
-
-                    gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
-                    player_x_pos = 11
-
+                if not invalid_tile_check(player_x_pos, player_y_pos):
                     current_chunk[player_y_pos][player_x_pos] = 2
                     await event.message.respond(print_array(12, 12, current_chunk))
                     await event.message.respond("----------------------------")
 
                 else:
-                    await event.message.respond("Invalid move!")
+                    player_x_pos = player_x_pos + 1
+                    await event.message.respond("Invalid Move! (Invalid Tile)")
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("----------------------------")
+
+            else:
+                if chunk_x_pos > 0:
+                    chunk_x_pos = chunk_x_pos - 1
+                    gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                    if not invalid_tile_check(player_x_pos, player_y_pos):
+                        player_x_pos = 11
+
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("----------------------------")
+
+                    else:
+                        chunk_x_pos = chunk_x_pos + 1
+                        gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                        await event.message.respond("Invalid move! (Invalid tile in other chunk)")
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("----------------------------")
+
+                else:
+                    await event.message.respond("Invalid move")
 
     @bot.listen()
     async def right(event: hikari.GuildMessageCreateEvent) -> None:
@@ -217,16 +235,24 @@ def run():
         if event.message.content == "!right":
             global player_x_pos
             global chunk_x_pos
-            if player_x_pos == w - 1:
+            if player_x_pos == h - 1:
                 if chunk_x_pos < 2:
                     chunk_x_pos = chunk_x_pos + 1
 
                     gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
-                    player_x_pos = 0
+                    if not invalid_tile_check(player_x_pos, 0):
+                        player_x_pos = 0
 
-                    current_chunk[player_y_pos][player_x_pos] = 2
-                    await event.message.respond(print_array(12, 12, current_chunk))
-                    await event.message.respond("----------------------------")
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("----------------------------")
+
+                    else:
+                        chunk_x_pos = chunk_x_pos - 1
+                        gen_chunk(12, 12, chunk_seed[chunk_y_pos][chunk_x_pos])
+                        current_chunk[player_y_pos][player_x_pos] = 2
+                        await event.message.respond(print_array(12, 12, current_chunk))
+                        await event.message.respond("Invalid move! (invalid tile in another chunk")
 
                 else:
                     await event.message.respond("Invalid move!")
@@ -234,9 +260,16 @@ def run():
             else:
                 current_chunk[player_y_pos][player_x_pos] = chunk_seed[chunk_y_pos][chunk_x_pos]
                 player_x_pos = player_x_pos + 1
-                current_chunk[player_y_pos][player_x_pos] = 2
-                await event.message.respond(print_array(12, 12, current_chunk))
-                await event.message.respond("----------------------------")
+                if not invalid_tile_check(player_x_pos, player_y_pos):
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("----------------------------")
+
+                else:
+                    player_x_pos = player_x_pos - 1
+                    current_chunk[player_y_pos][player_x_pos] = 2
+                    await event.message.respond(print_array(12, 12, current_chunk))
+                    await event.message.respond("Invalid move! (invalid tile)")
 
     bot.run()
 
