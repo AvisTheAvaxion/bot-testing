@@ -27,5 +27,7 @@ updated_player_movement
 '''
 
 # Using slash commands test
+'''
 import slash_command
 slash_command.run()
+'''
