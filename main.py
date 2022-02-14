@@ -25,3 +25,9 @@ read_json.run()
 import updated_player_movement
 updated_player_movement
 '''
+
+# Using slash commands test
+'''
+import slash_command
+slash_command.run()
+'''
