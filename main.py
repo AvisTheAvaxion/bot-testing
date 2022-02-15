@@ -31,3 +31,7 @@ updated_player_movement
 import slash_command
 slash_command.run()
 '''
+
+# Generate, store and load player data
+from player_data import player_data_creator
+player_data_creator.run()
