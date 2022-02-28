@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a86492c-a1dc-41c4-aa2e-568dc939aaea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/player_data/data_parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invsys3/conveince.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invsys3/inventory.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invsys3/invsys3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/invsys3/json_stuff.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/player_data/player_data_creator.py" beforeDir="false" afterPath="$PROJECT_DIR$/player_data/player_data_creator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +39,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/main.py" />
@@ -85,5 +89,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

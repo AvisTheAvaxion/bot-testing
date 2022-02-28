@@ -33,5 +33,11 @@ slash_command.run()
 '''
 
 # Generate, store and load player data
+'''
 from player_data import player_data_creator
 player_data_creator.run()
+'''
+
+# Inventory System concept 3
+from invSys3 import invsys3
+invsys3.run()
