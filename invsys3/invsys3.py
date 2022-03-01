@@ -28,11 +28,20 @@ async def ping(ctx: lightbulb.Context) -> None:
 
 
 @bot.command
+@lightbulb.command("kill", "kills the bot")
+@lightbulb.implements(lightbulb.SlashCommand, lightbulb.PrefixCommand)
+async def kill(ctx: lightbulb.Context) -> None:
+    await ctx.respond("dieing")
+    await bot.close()
+
+
+@bot.command
 @lightbulb.command("create", "creates base data")
 @lightbulb.implements(lightbulb.SlashCommand, lightbulb.PrefixCommand)
 async def create(ctx: lightbulb.Context) -> None:
-    path = conveince.get_user_data_path(ctx.author.id)
-    os.makedirs(path)
+    os.makedirs("invSys3/Users/" + str(ctx.author.id) + "/")
+
+    path = conveince.get_user_data_path(ctx.author.id, "inv.json")
     inventory.create_inventory(path)
 
     await ctx.respond("Inventory created!")
@@ -44,6 +53,27 @@ async def create(ctx: lightbulb.Context) -> None:
 async def show_inv(ctx: lightbulb.Context) -> None:
     inv = inventory.Inventory(conveince.get_user_data_path(ctx.author.id, "inv.json"))
     await ctx.respond(f"Inventory:\nItems: {inv.item_list}\nResource: {inv.resource_list}")
+
+    embed = hikari.Embed(title="Inventory", description="Your items")
+    for resource in inv.resource_list:
+        embed.add_field(name=f"{resource.name}: {resource.amount}", value=resource.description, inline=False)
+
+    for item in inv.item_list:
+        pass
+
+    await ctx.respond(embed=embed)
+
+
+@bot.command
+@lightbulb.option("name", "name")
+@lightbulb.option("desc", "desc")
+@lightbulb.option("amount", "amount")
+@lightbulb.command("add_resource", "adds a resource")
+@lightbulb.implements(lightbulb.SlashCommand, lightbulb.PrefixCommand)
+async def add_item(ctx: lightbulb.Context) -> None:
+    inv = inventory.Inventory(conveince.get_user_data_path(ctx.author.id, "inv.json"))
+    inv.add_resource(ctx.options.name, ctx.options.desc, ctx.options.amount)
+    await ctx.respond("added! (hopefully)")
 
 
 
