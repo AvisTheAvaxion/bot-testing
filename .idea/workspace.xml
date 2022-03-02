@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="8a86492c-a1dc-41c4-aa2e-568dc939aaea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/player_data/data_parser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/player_data/player_data_creator.py" beforeDir="false" afterPath="$PROJECT_DIR$/player_data/player_data_creator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/invSys3/Users/364905148083994626/inv.json" beforeDir="false" afterPath="$PROJECT_DIR$/invSys3/Users/364905148083994626/inv.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/invsys3/conveince.py" beforeDir="false" afterPath="$PROJECT_DIR$/invsys3/conveince.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/invsys3/inventory.py" beforeDir="false" afterPath="$PROJECT_DIR$/invsys3/inventory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/invsys3/invsys3.py" beforeDir="false" afterPath="$PROJECT_DIR$/invsys3/invsys3.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +41,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/main.py" />
@@ -49,9 +55,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\legod\AppData\Local\Programs\Python\Python310\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
@@ -85,5 +91,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
